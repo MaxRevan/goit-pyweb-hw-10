@@ -1,0 +1,26 @@
+{% extends "quotes/base.html" %}
+
+{% block content %}
+    <h2>Quotes from Users</h2>
+
+    {% for quote in user_quotes %}
+    <div class="quote" itemscope itemtype="http://schema.org/CreativeWork">
+        <span class="text" itemprop="text">“{{ quote.text }}”</span>
+        <span>by <small class="author" itemprop="author">{{ quote.author.name }}</small>
+            {% if quote.author %}
+                <a href="/author/{{ quote.author.name | slugify }}" previewlistener="true">(about_)</a>
+            {% endif %}
+        </span>
+        <div class="tags">
+            Tags:
+            <meta class="keywords" itemprop="keywords" content="{{ quote.tags | join:','  }}">
+            {% for tag in quote.tags.all %}
+                <a class="tag" href="/tag/{{ tag.name }}/page/1/" previewlistener="true">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    {% empty %}
+        <p>No quotes added by users yet.</p>
+    {% endfor %}
+{% endblock %}
